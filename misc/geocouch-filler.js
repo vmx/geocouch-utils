@@ -4,69 +4,73 @@
  * @author Benjamin Erb
  */
 var http = require('http');
-var util = require('util');
+var url = require('url');
+var path = require('path');
 
-var host = "localhost";
-var port = 5984;
-var db = "geotemp";
+require.paths.unshift(path.join(__dirname, 'lib'));
+var Barrier = require('barrier').Barrier;
 
-function getRandomArbitary(min, max) {
+var httpClientPoolSize = 16;
+var host,port,db;
+
+if(process.argv.length < 5){
+	console.log("\n\tUsage: node geocouch-filler.js <database-URI> <[bbox]> <count>\n\n")
+	process.exit(1);
+};
+var uri = url.parse(process.argv[2] || "http://localhost:5984/gc-utils");
+var bbox = JSON.parse(process.argv[3] || "[-180,-90,180,90]") ;
+var documentCount = parseInt(process.argv[4]) || 10;
+
+
+if(uri && bbox && bbox.length === 4 && documentCount){
+	host = uri.hostname;
+	port = uri.port || 5984;
+	db = uri.pathname.split("/")[1] || "gc-utils";
+}
+
+var randomArbitrary = function(min, max) {
     return Math.random() * (max - min) + min;
-}
+};
 
 
-function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
+//create client pool to speed
 var clients = [];
-
-for (var i = 0; i < 100; i++) {
+for (var i = 0; i < httpClientPoolSize; i++) {
     clients.push(http.createClient(port, host));
 }
 
+//barrier allows to exit when queries have been executed
+var b = new Barrier(documentCount, function() {
+	console.log("Insertion completed");
+	process.exit(0);
+});
 
 var ptr = 0;
 
-for (var i = 0; i < 30000; i++) {
-    var client = clients[ptr++ % 100];
-
-    var lat = getRandomArbitary(47, 54);
-    var lon = getRandomArbitary(6, 14);
-    var variance = getRandomInt(0, 2000);
-    var started = getRandomInt(1262304000, 1293753600);
-    var ended = started + getRandomInt(1, 7200);
-    var tags = [];
-
-    var tagCount = getRandomInt(1, 10);
-    for (var t = 0; t < tagCount; t++) {
-        tags.push("tag" + getRandomInt(0, 999));
-    }
+for (var i = 0; i < documentCount; i++) {
+    var client = clients[ptr++ % httpClientPoolSize];
 
     var entity = {
-        lat: lat,
-        lon: lon,
-        variance: variance,
-        ended: ended,
-        started: started,
-        tags: tags
+	"geo" : {
+		"type" : "Point",
+		"coordinates": [randomArbitrary(bbox[0],bbox[2]),randomArbitrary(bbox[1],bbox[3])]
+	}
     };
 
-
     var request = client.request('POST', "/" + db, {
-        "content-type": "application/json"
+        "Content-Type": "application/json",
+	"Connection": "keep-alive"
     });
     request.write(JSON.stringify(entity));
     request.end();
-    request.on('response', function (response) {
-        console.log('STATUS: ' + response.statusCode);
-        response.setEncoding('utf8');
-        var buf = "";
-        response.on('data', function (chunk) {
-            buf = buf + chunk;
-        });
-        response.on('end', function () {
-            console.log(util.inspect(JSON.parse(buf)));
-        });
+    request.once('response', function (response) {
+	if(response.statusCode === 201){
+		console.log("Document "+response.headers['location']+" created");
+		b.submit();
+	}
+	else{
+		console.log("POST caused "+response.statusCode+"!");
+		b.submit();
+	}
     });
 }

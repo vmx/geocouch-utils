@@ -5,11 +5,12 @@ This is a CouchApp providing helpul spatial functions and a set of helper script
 ## CouchApp
 
 The folder `couchapp/` is a CouchApp that provides useful spatial functions. Follow these steps for deployment to your GeoCouch:
-* Install the couchapp command line utility ()
-* Clone this repository. Don't forget to do so recursively if you need vendor submodules.
-* Change directory into `couchapp/` and execute: "couchapp init"
-* Push to your GeoCouch: couchapp push http://*yourcouch*/*db*
-* The CouchApp is then available at http://*yourcouch*/*db*/_design/gc-utils
+
+ * Install the couchapp command line utility ()
+ * Clone this repository. Don't forget to do so recursively if you need vendor submodules.
+ * Change directory into `couchapp/` and execute: "couchapp init"
+ * Push to your GeoCouch: couchapp push http://*yourcouch*/*db*
+ * The CouchApp is then available at http://*yourcouch*/*db*/_design/gc-utils
 
 ### lists
 
@@ -34,8 +35,17 @@ In the folder `misc` you can find helpful scripts or snippets for GeoCouch.
 
 ### geocouch-filler.js
 
-This node.js script can be handy for generating test data. It creates random documents within given value ranges.
-**documentation tbd.**
+This node.js script can be handy for generating test data. It creates random documents within given value ranges. The script expects the following parameters:
+
+ * The URI of the database to fill
+ * A bounding box of the area to fill
+ * The number of documents to generate
+
+Example call:
+
+	node geocouch-filler.js http://localhost:5984/gc-utils [-180,-90,180,90] 1000
+
+This will create 1.000 documents with random locations spread over the whole world.
 
 
 ## License
