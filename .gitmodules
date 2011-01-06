@@ -1,0 +1,3 @@
+[submodule "couchapp/vendor/geojson-js-utils"]
+	path = couchapp/vendor/geojson-js-utils
+	url = https://github.com/maxogden/geojson-js-utils.git
