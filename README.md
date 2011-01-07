@@ -169,7 +169,7 @@ Examples:
 
 In the folder `misc` you can find helpful scripts or snippets for GeoCouch.
 
-### geocouch-filler.js
+### geocouch-filler-js
 
 This node.js script can be handy for generating test data. It creates random documents within given value ranges. The script expects the following parameters:
 
