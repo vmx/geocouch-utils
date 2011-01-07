@@ -128,6 +128,14 @@ A simple map function that returns all documents. It's like _all_docs, but you c
 
 ### lists
 
+#### kml.js
+
+This list functions generates a simple KML feed
+
+Examples:
+
+Open a tool capable of handling KML feeds and import your query link: `http://localhost:5984/gc-utils/_design/gc-utils/_spatiallist/kml/points?bbox=0,0,45,45`  
+
 #### geojson.js 
 
 This function outputs a GeoJSON FeatureCollection (compatible with
