@@ -51,7 +51,7 @@ for (var i = 0; i < documentCount; i++) {
     var client = clients[ptr++ % httpClientPoolSize];
 
     var entity = {
-	"geo" : {
+	"geometry" : {
 		"type" : "Point",
 		"coordinates": [randomArbitrary(bbox[0],bbox[2]),randomArbitrary(bbox[1],bbox[3])]
 	}

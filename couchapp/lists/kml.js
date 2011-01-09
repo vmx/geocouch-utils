@@ -12,10 +12,10 @@ function(head, req) {
     send('<Document>\n');
     send('<name>GeoCouch Result - KML Feed</name>\n');
     while (row = getRow()) {
-    	if(row.value.geo){
+    	if(row.value.geometry){
             send('\t<Placemark>');
             send('<name>'+row.id+'</name>');
-            send('<Point><coordinates>'+row.value.geo.coordinates[0]+','+row.value.geo.coordinates[1]+',0</coordinates></Point>');
+            send('<Point><coordinates>'+row.value.geometry.coordinates[0]+','+row.value.geometry.coordinates[1]+',0</coordinates></Point>');
             send('</Placemark>\n');
     	}
     }

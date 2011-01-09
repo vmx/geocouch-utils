@@ -10,9 +10,9 @@ The folder `couchapp/` is a CouchApp that provides useful spatial functions. Fol
  * Clone this repository. Don't forget to do so recursively if you need vendor submodules.
  * Change directory into `couchapp/` and execute: "couchapp init"
  * Push to your GeoCouch: couchapp push http://*yourcouch*/*db*
- * The CouchApp is then available at http://*yourcouch*/*db*/_design/gc-utils
+ * The CouchApp is then available at http://*yourcouch*/*db*/_design/geo
 
-The document structure is used consistently within all views and examples, assuming that location information is provided in `doc.geo` containing a GeoJSON struct.
+The document structure is used consistently within all views and examples, assuming that location information is provided in `doc.geometry` containing a GeoJSON struct.
 If your document structure differs, don't forget to adapt the (spatial) views.
 
 Example:
@@ -20,7 +20,7 @@ Example:
 	{
 	   "_id": "c0c048ad2770bb836a10f164cc0a3fc0",
 	   "_rev": "1-e2d2130da93ca435965d6d3efca22380",
-	   "geo": {
+	   "geometry": {
 	       "type": "Point",
 	       "coordinates": [
 	           48.417,
@@ -34,11 +34,11 @@ Example:
 
 #### points.js
 
-A spatial view that additionally emits the original GeoJSON value (doc.geo) 
+A spatial view that additionally emits the original GeoJSON value (doc.geometry) 
 
 Example:
 
-	$ curl 'http://localhost:5984/gc-utils/_design/gc-utils/_spatial/points?bbox=80,88,90,90'
+	$ curl 'http://localhost:5984/gc-utils/_design/geo/_spatial/points?bbox=80,88,90,90'
 	{
 	   "update_seq":203,
 	   "rows":[
@@ -52,7 +52,7 @@ Example:
 	         ],
 	         "value":{
 	            "id":"c0c048ad2770bb836a10f164cc08a3e5",
-	            "geo":{
+	            "geometry":{
 	               "type":"Point",
 	               "coordinates":[
 	                  81.0876957164146,
@@ -70,7 +70,7 @@ A spatial view that emits both GeoJSON and the full document (as value).
 
 Example:
 
-	$ curl 'http://localhost:5984/gc-utils/_design/gc-utils/_spatial/pointsFull?bbox=80,88,90,90'	
+	$ curl 'http://localhost:5984/gc-utils/_design/geo/_spatial/pointsFull?bbox=80,88,90,90'	
 	{
 	   "update_seq":203,
 	   "rows":[
@@ -85,7 +85,7 @@ Example:
 	         "value":{
 	            "_id":"c0c048ad2770bb836a10f164cc08a3e5",
 	            "_rev":"1-0e087449742a73b5ce0df1415b1af3f3",
-	            "geo":{
+	            "geometry":{
 	               "type":"Point",
 	               "coordinates":[
 	                  81.0876957164146,
@@ -103,7 +103,7 @@ A spatial view that only emits GeoJSON and no additional value.
 
 Example:
 
-	$ curl 'http://localhost:5984/gc-utils/_design/gc-utils/_spatial/pointsOnly?bbox=80,88,90,90'	
+	$ curl 'http://localhost:5984/gc-utils/_design/geo/_spatial/pointsOnly?bbox=80,88,90,90'	
 	{
 	   "update_seq":203,
 	   "rows":[
@@ -134,7 +134,7 @@ This list functions generates a simple KML feed
 
 Examples:
 
-Open a tool capable of handling KML feeds and import your query link: `http://localhost:5984/gc-utils/_design/gc-utils/_spatiallist/kml/points?bbox=0,0,45,45`  
+Open a tool capable of handling KML feeds and import your query link: `http://localhost:5984/gc-utils/_design/geo/_spatiallist/kml/points?bbox=0,0,45,45`  
 
 #### geojson.js 
 
@@ -152,7 +152,7 @@ Examples:
 	}
 
 
-	$curl -X GET 'http://localhost:5984/gc-utils/_design/gc-utils/_spatiallist/geojson/points?bbox=80,88,90,90'	
+	$curl -X GET 'http://localhost:5984/gc-utils/_design/geo/_spatiallist/geojson/points?bbox=80,88,90,90'	
 	{
 	   "type":"FeatureCollection",
 	   "features":[
