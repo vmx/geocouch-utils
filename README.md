@@ -51,7 +51,7 @@ Example:
 	   "etc" : "..."
 	}
 
-### [Spatial Views] (https://github.com/vmx/couchdb)
+### [Spatial Views](https://github.com/vmx/couchdb)
 
 #### points.js
 
@@ -141,7 +141,7 @@ Example:
 	   ]
 	}
 
-### [Views] (http://guide.couchdb.org/draft/views.html)
+### [Views](http://guide.couchdb.org/draft/views.html)
 
 #### all 
 
