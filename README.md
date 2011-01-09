@@ -13,7 +13,8 @@ If you don't have a database, you'll have to create a new database to store your
 
 <code>curl -X PUT http://YOURCOUCH/DBNAME</code>
 
-When you store geo data in GeoCouch, you have to store them in the document under the key called <code>geometry</code>:
+When you store geo data in GeoCouch, the geometry is stored in the `geometry` property, all
+other properties in the `properties` property:
 
     // add a document with a valid geometry into your database
     $ curl -X PUT http://localhost:5984/DBNAME/myfeature -d '{"type":"Feature", "color":"orange" ,"geometry":{"type":"Point","coordinates":[11.395,48.949444]}}'
@@ -29,14 +30,14 @@ When you push these utils into your couch it will enhance your database with the
 
 ### geojson.js 
 
-This function outputs a GeoJSON FeatureCollection (compatible with
-OpenLayers and other mapping libraries). The geometry is stored in the `geometry` property, all
-other properties in the `properties` property.
+This function outputs a GeoJSON FeatureCollection (compatible with OpenLayers and other mapping libraries). 
 
 Example:
 
     $ curl -X GET http://localhost:5984/somedb/_design/geo/_list/geojson/all
-    {"type": "FeatureCollection", "features":[{"type": "Feature", "geometry": {"type":"Point","coordinates":[11.395,48.949444]}, "properties": {"_id":"myfeature","_rev":"1-2eeb1e5eee6c8e7507b671aa7d5b0654","type":"Feature","color":"orange"}}
+    {"type": "FeatureCollection", "features":[
+      {"type": "Feature", "geometry": {"type":"Point","coordinates":[11.395,48.949444]}, "properties": {"_id":"myfeature","_rev":"1-2eeb1e5eee6c8e7507b671aa7d5b0654","type":"Feature","color":"orange"}}
+    ]};
 
 ### radius.js
 
@@ -47,10 +48,12 @@ This will take the centroid of the bbox parameter and a supplied radius paramete
 Example:
 
     $ curl -X GET http://localhost:5984/mydb/_design/geo/_spatiallist/radius/points?bbox=-122.677,45.523,-122.675,45.524&radius=50
-    {"rows":[{"id":"ef512bfdc9b17e9827f7275dd07d59c0","geometry":{"coordinates":[-122.676634,45.523667],"type":"Point"}},
-    {"id":"ef512bfdc9b17e9827f7275dd07f4316","geometry":{"coordinates":[-122.676649,45.523966],"type":"Point"}},
-    {"id":"ef512bfdc9b17e9827f7275dd08985a9","geometry":{"coordinates":[-122.676652,45.524034],"type":"Point"}}]};
-
+    {"type": "FeatureCollection", "features":[
+      {"type": "Feature", "geometry": {"coordinates":[-122.676375038274,45.5233877497394],"type":"Point"}, "properties": {"id":"b7f31f5062745b6ca1c1adfc0c2351a1"}},
+      {"type": "Feature", "geometry": {"coordinates":[-122.675677497319,45.5231889018886],"type":"Point"}, "properties": {"id":"b7f31f5062745b6ca1c1adfc0c2aefef"}},
+      {"type": "Feature", "geometry": {"coordinates":[-122.675646878625,45.5237285034675],"type":"Point"}, "properties": {"id":"b7f31f5062745b6ca1c1adfc0c371b09"}}
+    ]};
+    
 ## Helper Scripts
 
 In the folder `misc` you can find helpful scripts or snippets for GeoCouch.

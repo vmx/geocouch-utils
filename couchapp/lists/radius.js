@@ -1,14 +1,15 @@
 function(head, req) {
-  var g = require('vendor/geojson-js-utils/geojson-utils'),
+  var gju = require('vendor/geojson-js-utils/geojson-utils'),
       row,
+      out,
       radius = req.query.radius,
       bbox = JSON.parse("[" + req.query.bbox + "]"),
-      center = g.rectangleCentroid({ 
+      center = gju.rectangleCentroid({ 
         "type": "Polygon",
         "coordinates": [[[bbox[0], bbox[1]], [bbox[2], bbox[3]]]]
       }),
       callback = req.query.callback,
-      circle = g.drawCircle(radius, center),
+      circle = gju.drawCircle(radius, center),
       startedOutput = false;
       
   if (req.headers.Accept.indexOf('application/json') != -1)
@@ -17,14 +18,17 @@ function(head, req) {
     start({"headers":{"Content-Type" : "text/plain"}});
 
   if ('callback' in req.query) send(req.query['callback'] + "(");
-  send('{"rows":[');
+  send('{"type": "FeatureCollection", "features":[');
   while (row = getRow()) {
-    if (g.pointInPolygon(row.value.geometry, circle)) {
+    if (gju.pointInPolygon(row.value.geometry, circle)) {
       if (startedOutput) send(",\n");
-      send(JSON.stringify(row.value));
+      out = '{"type": "Feature", "geometry": ' + JSON.stringify(row.value.geometry);
+      delete row.value.geometry;
+      out += ', "properties": ' + JSON.stringify(row.value) + '}';
+      send(out);
       startedOutput = true;
     }
   }
-  send("]};");
+  send("\n]};");
   if ('callback' in req.query) send(")");
 };
