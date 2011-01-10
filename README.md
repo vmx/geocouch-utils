@@ -1,6 +1,6 @@
 # Helper Functions for GeoCouch
 
-This is a [CouchApp](http://couchapp.org/page/index) providing spatial functions and a set of helper scripts for GeoCouch.
+This is a [CouchApp](http://couchapp.org/page/index) providing spatial functions and a set of helper scripts for [GeoCouch](https://github.com/vmx/couchdb).
 
 ## CouchApp
 
@@ -27,6 +27,11 @@ other properties in the `properties` property:
 You can either replicate the couchapp from my public couch at [http://max.couchone.com/apps/_design/geo](http://max.couchone.com/apps/_design/geo) (quickest option) or, if you want to hack on the source code first, you'll need to install the [CouchApp command line utility](http://couchapp.org/page/installing) and check out this repo.
 
 If you want to hack on the code (aka build it yourself), once you have the couchapp utility working, <code>git clone</code> this repo and go into this folder and execute <code>couchapp init</code>. To upload these utils into your couch just run <code>couchapp push http://YOURCOUCH/DATABASENAME</code>. Otherwise see the Quick install section above.
+
+This relies on [https://github.com/maxogden/geojson-js-utils](https://github.com/maxogden/geojson-js-utils) Make sure you also clone the submodules.  This can be done simply with these git commands:
+     git submodule init
+     git submodule update
+
 
 When you push these utils into your couch it will enhance your database with the magical geo sprinkles contained in this repo and teach your database how to do awesome things with geo data. At this point you can use the following commands:
 
@@ -220,6 +225,47 @@ Example:
 	      }
 	   ]
 	}
+
+#### proximity-clustering.js
+
+This groups points into clusters based on proximity. You can supply a threshold (distance in km) which detrimines how much area each cluster covers.
+
+Some code inspiration from Marker Clusterer - found here: [http://code.google.com/p/gmaps-utility-library/](http://code.google.com/p/gmaps-utility-library/)
+
+WARNING This only works with on points, not lines or polygons (not sure how that would be useful yet)
+
+Example:
+    $ curl -X GET 'http://localhost:5984/mydb/_design/geo/_spatiallist/cluster/points?bbox=-122.677,45.523,-122.675,45.524&threshold=50'
+    {"rows": [{
+        "center": {
+            "type": "Point",
+            "coordinates": [
+                41.35646666666667,
+                1.6144666666666663
+            ]
+        },
+        "points": [{
+            "id": "20132885373657090",
+            "geo": {
+                "type": "Point",
+                "coordinates": [
+                    41.3401,
+                    1.3596
+                ]
+            }
+        },
+        {
+            "id": "20138805986066430",
+            "geo": {
+                "type": "Point",
+                "coordinates": [
+                    41.3493,
+                    1.3631
+                 ]
+             }
+        }],
+        "size": 2
+    }]}
 
 
 ## Helper Scripts

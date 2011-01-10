@@ -2,12 +2,12 @@
  * Proximity based clustering
  */
 (function() {
-    log("pc called")
+
     var proxcluster = this.proxcluster = {};
 	if (typeof module !== 'undefined' && module.exports) {
 		module.exports = proxcluster;
 	}
-    log("pc called2")
+
     var gju = require('vendor/geojson-js-utils/geojson-utils');
 
     proxcluster.PointCluster = function(threshold){
