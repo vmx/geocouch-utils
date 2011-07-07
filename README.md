@@ -165,8 +165,7 @@ Open a tool capable of handling KML feeds and import your query link: `http://lo
 #### geojson.js 
 
 This function outputs a GeoJSON FeatureCollection (compatible with
-OpenLayers). The geometry is stored in the `geometry` property, all
-other properties in the `properties` property.
+OpenLayers).
 
 Examples:
 
