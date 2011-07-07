@@ -165,7 +165,8 @@ Open a tool capable of handling KML feeds and import your query link: `http://lo
 #### geojson.js 
 
 This function outputs a GeoJSON FeatureCollection (compatible with
-OpenLayers).
+OpenLayers). JSONP is supported as well (`callback` must be given as
+request parameter).
 
 Examples:
 
