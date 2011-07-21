@@ -58,97 +58,126 @@ Example:
 
 ### [Spatial Views](https://github.com/vmx/couchdb)
 
-#### points.js
+#### geoms.js
 
-A spatial view that additionally emits the original GeoJSON value (doc.geometry) 
-
-Example:
-
-	$ curl 'http://localhost:5984/gc-utils/_design/geo/_spatial/points?bbox=80,88,90,90'
-	{
-	   "update_seq":203,
-	   "rows":[
-	      {
-	         "id":"c0c048ad2770bb836a10f164cc08a3e5",
-	         "bbox":[
-	            81.0876957164146,
-	            89.14168435614556,
-	            81.0876957164146,
-	            89.14168435614556
-	         ],
-	         "value":{
-	            "id":"c0c048ad2770bb836a10f164cc08a3e5",
-	            "geometry":{
-	               "type":"Point",
-	               "coordinates":[
-	                  81.0876957164146,
-	                  89.14168435614556
-	               ]
-	            }
-	         }
-	      }
-	   ]
-	}
-
-#### pointsFull.js
-
-A spatial view that emits both GeoJSON and the full document (as value).  
+A spatial function that additionally emits the original GeoJSON value and the ID of the document.
 
 Example:
 
-	$ curl 'http://localhost:5984/gc-utils/_design/geo/_spatial/pointsFull?bbox=80,88,90,90'	
+	$ curl 'http://localhost:5984/gc-utils/_design/gc-utils/_spatial/geoms?bbox=80,88,90,90'
 	{
-	   "update_seq":203,
-	   "rows":[
-	      {
-	         "id":"c0c048ad2770bb836a10f164cc08a3e5",
-	         "bbox":[
-	            81.0876957164146,
-	            89.14168435614556,
-	            81.0876957164146,
-	            89.14168435614556
-	         ],
-	         "value":{
-	            "_id":"c0c048ad2770bb836a10f164cc08a3e5",
-	            "_rev":"1-0e087449742a73b5ce0df1415b1af3f3",
-	            "geometry":{
-	               "type":"Point",
-	               "coordinates":[
-	                  81.0876957164146,
-	                  89.14168435614556
-	               ]
-	            }
-	         }
-	      }
-	   ]
-	}
+	    "update_seq": 3,
+            "rows": [
+                {
+                    "bbox": [
+                        87.286559625063092,
+                        89.333551788702607,
+                        87.286559625063092,
+                        89.333551788702607
+                    ],
+                    "geometry": {
+                        "coordinates": [
+                            87.286559625063092,
+                            89.333551788702607
+                        ],
+                        "type": "Point"
+                    },
+                    "id": "c41ca5a5a455fcec882c5c15090013ed",
+                    "value": "c41ca5a5a455fcec882c5c15090013ed"
+                },
+                {
+                    "bbox": [
+                        89.836807711981237,
+                        89.573606480378658,
+                        89.836807711981237,
+                        89.573606480378658
+                    ],
+                    "geometry": {
+                        "coordinates": [
+                            89.836807711981237,
+                            89.573606480378658
+                        ],
+                        "type": "Point"
+                    },
+                    "id": "c41ca5a5a455fcec882c5c1509000d92",
+                    "value": "c41ca5a5a455fcec882c5c1509000d92"
+                }
+            ]
+        }
 
-#### pointsOnly.js
+#### geomsFull.js
 
-A spatial view that only emits GeoJSON and no additional value.
+A spatial function that emits both GeoJSON and the full document (as value).
 
 Example:
 
-	$ curl 'http://localhost:5984/gc-utils/_design/geo/_spatial/pointsOnly?bbox=80,88,90,90'	
-	{
-	   "update_seq":203,
-	   "rows":[
-	      {
-	         "id":"c0c048ad2770bb836a10f164cc08a3e5",
-	         "bbox":[
-	            81.0876957164146,
-	            89.14168435614556,
-	            81.0876957164146,
-	            89.14168435614556
-	         ],
-	         "value":null
-	      }
-	   ]
-	}
+	$ curl 'http://localhost:5984/gc-utils/_design/gc-utils/_spatial/geomsFull?bbox=80,88,90,90'
+        {
+            "update_seq": 3,
+            "rows": [
+                {
+                    "bbox": [
+                        87.286559625063092,
+                        89.333551788702607,
+                        87.286559625063092,
+                        89.333551788702607
+                    ],
+                    "geometry": {
+                        "coordinates": [
+                            87.286559625063092,
+                            89.333551788702607
+                        ],
+                        "type": "Point"
+                    },
+                    "id": "c41ca5a5a455fcec882c5c15090013ed",
+                    "value": {
+                        "_id": "c41ca5a5a455fcec882c5c15090013ed",
+                        "_rev": "1-8fe2437f80b8770e85274e981651555b",
+                        "geometry": {
+                            "coordinates": [
+                                87.286559625063092,
+                                89.333551788702607
+                            ],
+                            "type": "Point"
+                        }
+                    }
+                }
+            ]
+        }
+
+#### geomsOnly.js
+
+A spatial function that only emits GeoJSON and no additional value.
+
+Example:
+
+	$ curl 'http://localhost:5984/gc-utils/_design/gc-utils/_spatial/geomsOnly?bbox=80,88,90,90'
+        {
+            "update_seq": 3,
+            "rows": [
+                {
+                    "bbox": [
+                        87.286559625063092,
+                        89.333551788702607,
+                        87.286559625063092,
+                        89.333551788702607
+                    ],
+                    "geometry": {
+                        "coordinates": [
+                            87.286559625063092,
+                            89.333551788702607
+                        ],
+                        "type": "Point"
+                    },
+                    "id": "c41ca5a5a455fcec882c5c15090013ed",
+                    "value": null
+                }
+            ]
+        }
 
 ### [Views](http://guide.couchdb.org/draft/views.html)
 
-#### all 
+#### all
 
 A simple map function that returns all documents. It's like _all_docs, but you can use it as a regular view.
 
@@ -160,9 +189,9 @@ This list functions generates a simple KML feed
 
 Examples:
 
-Open a tool capable of handling KML feeds and import your query link: `http://localhost:5984/gc-utils/_design/geo/_spatiallist/kml/points?bbox=0,0,45,45`  
+Open a tool capable of handling KML feeds and import your query link: `http://localhost:5984/gc-utils/_design/geo/_spatiallist/kml/points?bbox=0,0,45,45`
 
-#### geojson.js 
+#### geojson.js
 
 This function outputs a GeoJSON FeatureCollection (compatible with
 OpenLayers). JSONP is supported as well (`callback` must be given as
@@ -178,7 +207,7 @@ Examples:
 	}
 
 
-	$curl -X GET 'http://localhost:5984/gc-utils/_design/geo/_spatiallist/geojson/points?bbox=80,88,90,90'	
+	$curl -X GET 'http://localhost:5984/gc-utils/_design/geo/_spatiallist/geojson/points?bbox=80,88,90,90'
 	{
 	   "type":"FeatureCollection",
 	   "features":[
