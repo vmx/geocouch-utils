@@ -9,7 +9,7 @@ The folder `couchapp/` is a CouchApp that provides useful spatial functions.
 ### Quick install (without cloning this repo)
 
 * If you don't already have one, make a database on your couch: <code>curl -X PUT http://YOURCOUCH/DBNAME</code>
-* Replicate the geocouch utils from my public couch to your database: <code>curl -X POST http://YOURCOUCH/\_replicate -d '{"source":"http://max.couchone.com/apps","target":"http://YOURCOUCH/DBNAME", "doc\_ids":["_design/geo"]}'</code>
+* Replicate the geocouch utils from my public couch to your database: <code>curl -X POST -H 'Content-type: application/json' http://YOURCOUCH/\_replicate -d '{"source":"http://vmx.iriscouch.com/apps","target":"http://YOURCOUCH/DBNAME", "doc\_ids":["_design/gc-utils"]}'</code>
 
 ### In-depth install
 
@@ -24,7 +24,7 @@ other properties in the `properties` property:
     $ curl -X PUT http://localhost:5984/DBNAME/myfeature -d '{"type":"Feature", "color":"orange" ,"geometry":{"type":"Point","coordinates":[11.395,48.949444]}}'
     {"ok":true,"id":"myfeature","rev":"1-2eeb1e5eee6c8e7507b671aa7d5b0654"}
 
-You can either replicate the couchapp from my public couch at [http://max.couchone.com/apps/_design/geo](http://max.couchone.com/apps/_design/geo) (quickest option) or, if you want to hack on the source code first, you'll need to install the [CouchApp command line utility](http://couchapp.org/page/installing) and check out this repo.
+You can either replicate the couchapp from my public couch at [http://vmx.iriscouch.com/apps/_design/gc-utils](http://vmx.iriscouch.com/apps/_design/gc-utils) (quickest option) or, if you want to hack on the source code first, you'll need to install the [CouchApp command line utility](http://couchapp.org/page/installing) and check out this repo.
 
 If you want to hack on the code (aka build it yourself), once you have the couchapp utility working, <code>git clone</code> this repo and go into this folder and execute <code>couchapp init</code>. To upload these utils into your couch just run <code>couchapp push http://YOURCOUCH/DATABASENAME</code>. Otherwise see the Quick install section above.
 
@@ -39,7 +39,7 @@ When you push these utils into your couch it will enhance your database with the
 ### Document Structure used in this CouchApp
 
 The document structure is used consistently within all views and examples, assuming that location information is provided in `doc.geometry` containing a GeoJSON struct.
-If your document structure differs, don't forget to adapt the (spatial) views.
+If your document structure differs, don't forget to adapt the (spatial) indexes.
 
 Example:
 
@@ -56,7 +56,7 @@ Example:
 	   "etc" : "..."
 	}
 
-### [Spatial Views](https://github.com/vmx/couchdb)
+### [Spatial Indexes](https://github.com/couchbase/geocouch)
 
 #### geoms.js
 
@@ -189,7 +189,7 @@ This list functions generates a simple KML feed
 
 Examples:
 
-Open a tool capable of handling KML feeds and import your query link: `http://localhost:5984/gc-utils/_design/geo/_spatiallist/kml/points?bbox=0,0,45,45`
+Open a tool capable of handling KML feeds and import your query link: `http://localhost:5984/gc-utils/_design/gc-utils/_spatial/_list/kml/geoms?bbox=0,0,45,45`
 
 #### geojson.js
 
@@ -207,7 +207,7 @@ Examples:
 	}
 
 
-	$curl -X GET 'http://localhost:5984/gc-utils/_design/geo/_spatiallist/geojson/points?bbox=80,88,90,90'
+	$curl -X GET 'http://localhost:5984/gc-utils/_design/gc_utils/_spatial/_list/geojson/geoms?bbox=80,88,90,90'
 	{
 	   "type":"FeatureCollection",
 	   "features":[
@@ -235,7 +235,7 @@ This will take the centroid of the bbox parameter and a supplied radius paramete
 
 Example:
 
-	$ curl -X GET http://localhost:5984/gc-utils/_design/geo/_spatiallist/radius/points?bbox=-122.677,45.523,-122.675,45.524&radius=50
+	$ curl -X GET http://localhost:5984/gc-utils/_design/gc-utils/_spatial/_list/radius/geoms?bbox=-122.677,45.523,-122.675,45.524&radius=50
 	{
 	   "type":"FeatureCollection",
 	   "features":[
@@ -264,7 +264,7 @@ Some code inspiration from Marker Clusterer - found here: [http://code.google.co
 WARNING This only works with on points, not lines or polygons (not sure how that would be useful yet)
 
 Example:
-    $ curl -X GET 'http://localhost:5984/mydb/_design/geo/_spatiallist/cluster/points?bbox=-122.677,45.523,-122.675,45.524&threshold=50'
+    $ curl -X GET 'http://localhost:5984/mydb/_design/gc-utils/_spatial/_list/cluster/geoms?bbox=-122.677,45.523,-122.675,45.524&threshold=50'
     {"rows": [{
         "center": {
             "type": "Point",
