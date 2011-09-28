@@ -175,6 +175,40 @@ Example:
             ]
         }
 
+#### geomsProps.js
+
+A spatial function that emits the geometry plus the value of the
+properties field of the document (or null if not defined).
+
+Example:
+
+	$ curl 'http://localhost:5984/gc-utils/_design/gc-utils/_spatial/geomsProps?bbox=80,88,90,90'
+        {
+            "update_seq": 3,
+            "rows": [
+                {
+                    "bbox": [
+                        87.286559625063092,
+                        89.333551788702607,
+                        87.286559625063092,
+                        89.333551788702607
+                    ],
+                    "geometry": {
+                        "coordinates": [
+                            87.286559625063092,
+                            89.333551788702607
+                        ],
+                        "type": "Point"
+                    },
+                    "id": "c41ca5a5a455fcec882c5c15090013ed",
+                    "value": {
+                        "some": "value"
+                    }
+                }
+            ]
+        }
+
+
 ### [Views](http://guide.couchdb.org/draft/views.html)
 
 #### all
