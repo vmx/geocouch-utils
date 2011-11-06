@@ -241,7 +241,7 @@ Examples:
 	}
 
 
-	$curl -X GET 'http://localhost:5984/gc-utils/_design/gc_utils/_spatial/_list/geojson/geoms?bbox=80,88,90,90'
+	$curl -X GET 'http://localhost:5984/gc-utils/_design/gc-utils/_spatial/_list/geojson/geoms?bbox=80,88,90,90'
 	{
 	   "type":"FeatureCollection",
 	   "features":[
