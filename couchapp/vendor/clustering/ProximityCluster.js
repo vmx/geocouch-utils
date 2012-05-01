@@ -76,9 +76,9 @@
             this.center = point.geometry;
         } else {
             var l = this.points.length + 1;
-            var lat = (this.center.coordinates[0] * (l-1) + point.geometry.coordinates[0]) / l;
-            var lng = (this.center.coordinates[1] * (l-1) + point.geometry.coordinates[1]) / l;
-            this.center = {"type": "Point", "coordinates":[lat, lng]};
+            var lng = (this.center.coordinates[0] * (l-1) + point.geometry.coordinates[0]) / l;
+            var lat = (this.center.coordinates[1] * (l-1) + point.geometry.coordinates[1]) / l;
+            this.center = {"type": "Point", "coordinates":[lng, lat]};
         }
 
       
