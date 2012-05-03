@@ -1,0 +1,12 @@
+{
+    "name": "geo",
+    "version": "0.0.1",
+    "description": "Helper functions for GeoCouch - geocouch-utils",
+    "url": "https://github.com/NathanOehlman/geocouch-utils",
+    "modules": ["lib", "vendor"],
+    "load": "lib/geocouch-utils",
+    "dependencies": {
+        "modules": null,
+        "properties": null
+    }
+}
